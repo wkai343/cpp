@@ -1,0 +1,2 @@
+#pragma once
+enum Status{UNDER_FLOW,OVER_FLOW,INVALID,SUCESESS,NOT_FIND};
