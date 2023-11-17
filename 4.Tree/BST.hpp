@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 struct BNode {
     int data;
     int height;
@@ -131,5 +132,15 @@ public:
     void inOrder() {
         if(root == nullptr) return;
         inOrder(root);
+    }
+    void levelOrder() {
+        std::queue<BNode*> q;
+        if(root != nullptr) q.push(root);
+        while(!q.empty()) {
+            std::cout << q.front()->data << ' ';
+            if(q.front()->left != nullptr) q.push(q.front()->left);
+            if(q.front()->right != nullptr) q.push((q.front()->right));
+            q.pop();
+        }
     }
 };

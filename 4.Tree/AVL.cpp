@@ -5,6 +5,12 @@
     int getHeight(BNode*);
 class AVL :public BST{
 public:
+    AVL() {}
+    AVL(int* data, int n) {
+        for(int i = 0; i < n; ++i) {
+            insertNode(data[i]);
+        }
+    }
     // bool insertData(int i) {
     //     if(root == nullptr) {
     //         root = new BNode(i);
@@ -28,10 +34,7 @@ public:
     //     return true;
     // }
     void insertNode(int i) {
-        BNode* p;
-        if(!searchNode(i)) {
-            root = insertNode(root, i);
-        }
+        root = insertNode(root, i);
     }
     BNode* insertNode(BNode* node, int i) {
         if(node == nullptr) {
@@ -42,8 +45,8 @@ public:
         } else if(i > node->data) {
             node->right = insertNode(node->right, i);
         }
-        // node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
-        ++node->height;
+        node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+        // ++node->height;
         if(node->getBalance() > 1 && node->left->getBalance() > 0) {
             rightRotate(node);
         }
@@ -60,9 +63,56 @@ public:
         }
         return node;
     }
-    // bool deleteData(int i) {
-    //     return false;
-    // }
+    void deleteNode(int i) {
+        root = deleteNode(root, i);
+    }
+    BNode* deleteNode(BNode* node, int i) {
+        if(node == nullptr) {
+            return nullptr;
+        }
+        if(i < node->data) {
+            node->left = deleteNode(node->left, i);
+        } else if(i > node->data) {
+            node->right = deleteNode(node->right, i);
+        } else {
+            BNode* t;
+            if(node->left == nullptr || node->right == nullptr) {
+                if(node->left == nullptr) {
+                    t = node->right;
+                    delete node;
+                    return t;
+                } else {
+                    t = node->left;
+                    delete node;
+                    return t;
+                }
+            } else {
+                t = node->left;
+                while (t->right != nullptr) {
+                    t = t->right;
+                }
+                node->data = t->data;
+                node->left = deleteNode(node->left, node->data);
+            }
+        }
+        node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+        // ++node->height;
+        if(node->getBalance() > 1 && node->left->getBalance() >= 0) {
+            rightRotate(node);
+        }
+        if(node->getBalance() < -1 && node->right->getBalance() <= 0) {
+            leftRotate(node);
+        }
+        if(node->getBalance() > 1 && node->left->getBalance() < 0) {
+            leftRotate(node->left);
+            leftRotate(node);
+        }
+        if(node->getBalance() < -1 && node->right->getBalance() > 0) {
+            rightRotate(node->right);
+            rightRotate(node);
+        }
+        return node;
+    }
 };
 void leftRotate(BNode*& p) {
     BNode* temp = p->right;
