@@ -1,5 +1,4 @@
 #include<iostream>
-using namespace std;
 int main() {
-    std::cout << "hello" << std::endl;
+    std::cout << "Hello!" << std::endl;
 }

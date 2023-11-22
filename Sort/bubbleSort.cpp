@@ -1,7 +1,5 @@
 void bubbleSort(int* data, int n) {
-    if(data == nullptr || n <= 0) {
-        return;
-    }
+    if(data == nullptr || n <= 0) return;
     bool sorted = false;
     int t;
     for(int i = 0; i < n - 1 && !sorted; ++i) {
