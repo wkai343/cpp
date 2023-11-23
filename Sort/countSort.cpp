@@ -1,4 +1,4 @@
-void bucketSort(int* data, int n) {
+void countSort(int* data, int n) {
     if(data == nullptr || n <= 0) return;
     int max = data[0], count = 0;
     for(int i = 1; i < n; ++i) {
