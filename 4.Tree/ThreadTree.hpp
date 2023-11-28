@@ -1,7 +1,5 @@
-#include <cstddef>
 #include <iostream>
 #include <stack>
-#include <mutex>
 using namespace std;
 struct TBNode {
     char data;
@@ -12,26 +10,25 @@ struct TBNode {
 class PreThreadTree {
 private:
     TBNode* root;
-    TBNode* _createByPre(char* in, char* pre, int n) {
+    TBNode* _createByInAndPre(char* in, char* pre, int n) {
         if(n == 0) return nullptr;
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        return new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        return new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
-    void thread(TBNode* p) {
-        static TBNode* pre = p;
+    void thread(TBNode* p, TBNode*& pre) {
         if(p) {
             if(p->left == nullptr) {
                 p->left = pre;
                 p->lTag = 1;
             }
-            if(pre->right == nullptr) {
+            if(pre && pre->right == nullptr) {
                 pre->right = p;
                 pre->rTag = 1;
             }
             pre = p;
-            if(!p->lTag) thread(p->left);
-            if(!p->rTag) thread(p->right);
+            if(!p->lTag) thread(p->left, pre);
+            if(!p->rTag) thread(p->right, pre);
         }
     }
 public:
@@ -42,7 +39,7 @@ public:
         if(root != nullptr) clear();
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        root = new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        root = new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
     TBNode* getNext(TBNode* p){
         if(p->rTag) {
@@ -62,22 +59,22 @@ public:
         }
     }
     void thread() {
-        thread(root);
+        TBNode* p = nullptr;
+        thread(root, p);
     }
 };
 class InThreadTree {
 private:
     TBNode* root;
-    TBNode* _createByPre(char* in, char* pre, int n) {
+    TBNode* _createByInAndPre(char* in, char* pre, int n) {
         if(n == 0) return nullptr;
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        return new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        return new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
-    void thread(TBNode* p) {
-        static TBNode* pre = nullptr;
+    void thread(TBNode* p, TBNode*& pre) {
         if(p) {
-            thread(p->left);
+            thread(p->left, pre);
             if(p->left == nullptr) {
                 p->left = pre;
                 p->lTag = 1;
@@ -87,7 +84,7 @@ private:
                 pre->rTag = 1;
             }
             pre = p;
-            thread(p->right);
+            thread(p->right, pre);
         } 
     }
 public:
@@ -103,7 +100,7 @@ public:
         if(root != nullptr) clear();
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        root = new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        root = new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
     TBNode* getNext(TBNode* p) {
         if(p->rTag) {
@@ -131,24 +128,24 @@ public:
         }
     }
     void thread() {
-        thread(root);
+        TBNode* p = nullptr;
+        thread(root, p);
     }
     void clear() {}
 };
 class PostThreadTree {
 private:
     TBNode* root;
-    TBNode* _createByPre(char* in, char* pre, int n) {
+    TBNode* _createByInAndPre(char* in, char* pre, int n) {
         if(n == 0) return nullptr;
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        return new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        return new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
-    void thread(TBNode* p) {
-        static TBNode* pre = nullptr;
+    void thread(TBNode* p, TBNode*& pre) {
         if(p) {
-            thread(p->left);
-            thread(p->right);
+            thread(p->left, pre);
+            thread(p->right, pre);
             if(pre && p->left == nullptr) {
                 p->left = pre;
                 p->lTag = 1;
@@ -173,7 +170,7 @@ public:
         if(root != nullptr) clear();
         int i = 0;
         while(pre[0] != in[i]) ++i;
-        root = new TBNode(pre[0], _createByPre(in, pre + 1, i), _createByPre(in + i + 1, pre + i + 1, n - i - 1));
+        root = new TBNode(pre[0], _createByInAndPre(in, pre + 1, i), _createByInAndPre(in + i + 1, pre + i + 1, n - i - 1));
     }
     TBNode* getPre(TBNode* p) {
         if(p->lTag) {
@@ -198,8 +195,8 @@ public:
         }
     }
     void thread() {
-        thread(root);
+        TBNode* p = nullptr;
+        thread(root, p);
     }
     void clear() {}
 };
-class LevelThreadTree {};
