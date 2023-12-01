@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -23,6 +24,7 @@ protected:
     int vexNum, arcNum, size;
     VexNode* vex;
 public:
+    friend void dijkstra(const DNet&, int);
     DNet(int s) :vexNum(0), arcNum(0), size(0) {
         vex = new VexNode[s];
     }

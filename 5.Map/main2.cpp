@@ -1,4 +1,5 @@
 #include "ALNet.hpp"
+#include "dijkstra.cpp"
 int main() {
     char ch[] = "ABCDEFGHI";
     DNet n(ch, 9);
@@ -17,6 +18,6 @@ int main() {
     n.insertArc(6, 1, 8);
     n.insertArc(7, 6, 12);
     n.insertArc(7, 8, 10);
-    n.getMinPath(0);
+    dijkstra(n, 0);
     return 0;
 }

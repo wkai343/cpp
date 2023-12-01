@@ -34,6 +34,7 @@ public:
             delete[] arc[i];
         }
         delete[] arc;
+        delete[] visited;
     }
     void clear() {
         for(int i = 0; i < vexNum; ++i) {

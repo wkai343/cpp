@@ -38,6 +38,7 @@ public:
     ~DGraph() {
         clear();
         delete[] vex;
+        delete[] visited;
     }
     void clear() {
         vexNum = arcNum = 0;
