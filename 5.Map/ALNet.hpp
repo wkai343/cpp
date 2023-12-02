@@ -65,7 +65,7 @@ public:
     int getArcNum() const {
         return arcNum;
     }
-    int getIArcNum(int v) const {
+    int getID(int v) const {
         ArcNode* p;
         int count = 0;
         for(int i = 0; i < vexNum; ++i) {
@@ -77,17 +77,17 @@ public:
         }
         return count;
     }
-    int getOArcNum(int v) const {
+    int getOD(int v) const {
         ArcNode* p = vex[v].arc;
-        int count;
+        int count = 0;
         while(p != nullptr) {
             ++count;
             p = p->next;
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getIArcNum(v) + getOArcNum(v);
+    int getD(int v) const {
+        return getID(v) + getOD(v);
     }
     void insertVex(char ch) {
         if(vexNum == size) {
@@ -228,10 +228,10 @@ private:
     UNet(int s) :DNet(s) {}
     UNet(char* data, int n) :DNet(data, n) {}
 public:
-    int getIArcNum(int v) const {
-        return getOArcNum(v);
+    int getID(int v) const {
+        return getOD(v);
     }
-    int getOArcNum(int v) const {
+    int getOD(int v) const {
         ArcNode* p = vex[v].arc;
         int count;
         while(p != nullptr) {
@@ -240,8 +240,8 @@ public:
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getOArcNum(v);
+    int getD(int v) const {
+        return getOD(v);
     }
     void insertArc(int v1, int v2, int w) {
         DNet::insertArc(v1, v2, w);

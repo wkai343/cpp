@@ -1,4 +1,6 @@
+#pragma once
 #include <iostream>
+#include <stack>
 class DGraph {
 protected:
     int vexNum, arcNum, size;
@@ -67,22 +69,22 @@ public:
         }
         return -1;
     }
-    int getIArcNum(int v) const {
-        int count;
+    int getID(int v) const {
+        int count = 0;
         for(int i = 0; i < vexNum; ++i) {
             if(arc[i][v] == true) ++count;
         }
         return count;
     }
-    int getOArcNum(int v) const {
-        int count;
+    int getOD(int v) const {
+        int count = 0;
         for(int i = 0; i < vexNum; ++i) {
             if(arc[v][i] == true) ++count;
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getIArcNum(v) + getOArcNum(v);
+    int getD(int v) const {
+        return getID(v) + getOD(v);
     }
     void insertVex(char ch) {
         if(vexNum == size) {
@@ -97,7 +99,7 @@ public:
     }
     void deleteVex(int v) {
         if(v < 0 || v >= vexNum) return;
-        arcNum -= getArcNum(v);
+        arcNum -= getD(v);
         for(int i = v; i < vexNum - 1; ++i) {
             for(int j = 0; j < v; ++j) {
                 arc[i][j] = arc[i + 1][j];
@@ -118,23 +120,43 @@ public:
         arc[v1][v2] = false;
         --arcNum;
     }
+    void topSort() {
+        std::stack<int> s;
+        int ind[vexNum], temp;
+        for(int i = 0; i < vexNum; ++i) {
+            ind[i] = getID(i);
+        }
+        for(int i = 0; i < vexNum; ++i) {
+            if(ind[i] == 0) s.push(i);
+        }
+        while(!s.empty()) {
+            temp = s.top();
+            s.pop();
+            std::cout << vex[temp] << ' ';
+            for(int i = 0; i < vexNum; ++i) {
+                if(arc[temp][i] != 0) {
+                    if(--ind[i] == 0) s.push(i);
+                }
+            }
+        }
+    }
 };
 class UGraph :public DGraph {
 public:
     UGraph(int s) :DGraph(s) {}
     UGraph(char* data, int n) :DGraph(data, n) {}
-    int getIArcNum(int v) const {
-        return getOArcNum(v);
+    int getID(int v) const {
+        return getOD(v);
     }
-    int getOArcNum(int v) const {
+    int getOD(int v) const {
         int count;
         for(int i = 0; i < vexNum; ++i) {
             if(arc[v][i] == true) ++count;
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getOArcNum(v);
+    int getD(int v) const {
+        return getOD(v);
     }
     void insertArc(int v1, int v2) {
         arc[v1][v2] = true;

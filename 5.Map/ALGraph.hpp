@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 struct ArcNode {
     int vex;
     ArcNode* next;
@@ -70,7 +71,7 @@ public:
     int getArcNum() const {
         return arcNum;
     }
-    int getIArcNum(int v) const {
+    int getID(int v) const {
         ArcNode* p;
         int count = 0;
         for(int i = 0; i < vexNum; ++i) {
@@ -82,17 +83,17 @@ public:
         }
         return count;
     }
-    int getOArcNum(int v) const {
+    int getOD(int v) const {
         ArcNode* p = vex[v].arc;
-        int count;
+        int count = 0;
         while(p != nullptr) {
             ++count;
             p = p->next;
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getIArcNum(v) + getOArcNum(v);
+    int getD(int v) const {
+        return getID(v) + getOD(v);
     }
     void insertVex(char ch) {
         if(vexNum == size) {
@@ -146,6 +147,40 @@ public:
             }
             p = p->next;
         }
+    }
+    // 拓扑排序
+    bool topSort() {
+        int ind[vexNum], temp;
+        std::stack<int> s;
+        ArcNode* p;
+        for(int i = 0; i < vexNum; ++i) {
+            ind[i] = 0;
+        }
+        for(int i = 0; i < vexNum; ++i) {
+            p = vex[i].arc;
+            while(p != nullptr) {
+                ++ind[p->vex];
+                p = p->next;
+            }
+        }
+        for(int i = 0; i < vexNum; ++i) {
+            if(ind[i] == 0) s.push(i);
+        }
+        while(!s.empty()) {
+            temp = s.top();
+            s.pop();
+            std::cout << vex[temp].ch << ' ';
+            p = vex[temp].arc;
+            while(p != nullptr) {
+                if(--ind[p->vex] == 0) s.push(p->vex);
+                p = p->next;
+            }
+        }
+
+        for(int& e: ind) {
+            if(e != 0) return true;
+        }
+        return false;
     }
     void DFS(int v) const {
         std::cout << vex[v].ch << ' ';
@@ -201,10 +236,10 @@ class UGraph :public DGraph {
 public:
     UGraph(int s) :DGraph(s) {}
     UGraph(char* data, int n) :DGraph(data, n) {}
-    int getIArcNum(int v) const {
-        return getOArcNum(v);
+    int getID(int v) const {
+        return getOD(v);
     }
-    int getOArcNum(int v) const {
+    int getOD(int v) const {
         ArcNode* p = vex[v].arc;
         int count;
         while(p != nullptr) {
@@ -213,8 +248,8 @@ public:
         }
         return count;
     }
-    int getArcNum(int v) const {
-        return getOArcNum(v);
+    int getD(int v) const {
+        return getOD(v);
     }
     void insertArc(int v1, int v2) {
         DGraph::insertArc(v1, v2);
