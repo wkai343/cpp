@@ -18,6 +18,6 @@ int main() {
     n.insertArc(6, 1, 8);
     n.insertArc(7, 6, 12);
     n.insertArc(7, 8, 10);
-    dijkstra(n, 0);
+    std::cout << n.topSort();
     return 0;
 }

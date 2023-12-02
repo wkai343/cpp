@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <queue>
+#include <stack>
 #include <vector>
 struct ArcNode {
     int vex, weight;
@@ -25,10 +26,11 @@ protected:
     VexNode* vex;
 public:
     friend void dijkstra(const DNet&, int);
-    DNet(int s) :vexNum(0), arcNum(0), size(0) {
+    friend void dijkstra1(const DNet&, int);
+    DNet(int s): size(s), vexNum(0), arcNum(0) {
         vex = new VexNode[s];
     }
-    DNet(char* data, int n) :DNet(n + 10) {
+    DNet(char* data, int n): DNet(n + 10) {
         vexNum += n;
         for(int i = 0; i < n; ++i) {
             vex[i].ch = data[i];
@@ -93,7 +95,7 @@ public:
         }
         vex[vexNum++] = ch;
     }
-    void insertArc(int v1, int v2, int w) {
+    void insertArc(int v1, int v2, int w = 1) {
         if(v1 < 0 || v1 >= vexNum || v2 < 0 || v2 >= vexNum || v1 == v2) return;
         ArcNode* p = vex[v1].arc;
         if(p) {
@@ -148,6 +150,41 @@ public:
             p = p->next;
         }
     }
+    // 拓扑排序
+    bool topSort() {
+        int ind[vexNum], temp;
+        std::stack<int> s;
+        ArcNode* p;
+        for(int i = 0; i < vexNum; ++i) {
+            ind[i] = 0;
+        }
+        for(int i = 0; i < vexNum; ++i) {
+            p = vex[i].arc;
+            while(p != nullptr) {
+                ++ind[p->vex];
+                p = p->next;
+            }
+        }
+        for(int i = 0; i < vexNum; ++i) {
+            if(ind[i] == 0) s.push(i);
+        }
+        while(!s.empty()) {
+            temp = s.top();
+            s.pop();
+            std::cout << vex[temp].ch << ' ';
+            p = vex[temp].arc;
+            while(p != nullptr) {
+                if(--ind[p->vex] == 0) s.push(p->vex);
+                p = p->next;
+            }
+        }
+
+        for(int& e: ind) {
+            if(e != 0) return true;
+        }
+        return false;
+    }
+    // BFS求最短路径
     void getMinPath(int v) {
         std::pair<int, int> path[vexNum];
         ArcNode* p;
