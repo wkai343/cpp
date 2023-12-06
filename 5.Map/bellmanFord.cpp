@@ -1,5 +1,4 @@
 #include "AMNet.hpp"
-#include <cstdio>
 #include <vector>
 #include <queue>
 struct Edge {
@@ -47,10 +46,7 @@ bool bellmanFord(const DNet& net, int v) {
             return false;
         }
     }
-    // for(auto e: dist) std::cout << e << ' ';
-    // std::cout << std::endl;
-    // for(auto e: path) std::cout << e << ' ';
-    // std::printf("\n");
+
     for(int i = 0; i < net.getVexNum(); ++i) {
         if(i !=v && path[i] != -1) {
             p = i;

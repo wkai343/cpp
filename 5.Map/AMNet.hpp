@@ -136,8 +136,21 @@ public:
 };
 class UNet: public DNet {
 public:
+    UNet(const UNet& net): DNet(net.size) {
+        for(int i = 0; i < net.getVexNum(); ++i) {
+            insertVex(net.vex[i]);
+        }
+        for(int i = 0; i < net.getVexNum(); ++i) {
+            for(int j = 0; j < net.getVexNum(); ++j) {
+                arc[i][j] = net.arc[i][j];
+            }
+        }
+        arcNum = net.getArcNum();
+    }
     friend void kruskal(const UNet&);
     friend void prim(const UNet&, int);
+    friend void breakCircle(const UNet&);
+    friend bool isConnect(const UNet&);
     UNet(int s): DNet(s) {}
     UNet(char* data, int n): DNet(data, n) {}
     int getID(int v) const {

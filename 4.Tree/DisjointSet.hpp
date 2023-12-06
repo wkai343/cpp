@@ -3,8 +3,9 @@ private:
     int* parent;
     int* rnk;
     int* sz;
+    int n;
 public:
-    DisjointSet(int n) {
+    DisjointSet(int n): n(n) {
         parent = new int[n];
         rnk = new int[n];
         sz = new int[n];
@@ -37,7 +38,7 @@ public:
         }
         return p;
     }
-    bool judge(int a, int b) {
+    bool inSameSet(int a, int b) {
         return find2(a) == find2(b);
     }
     // 简单合并
@@ -69,5 +70,13 @@ public:
             parent[pb] = pa;
             sz[pa] += sz[pb];
         }
+    }
+    // 计集合数
+    int getSetNum() {
+        int count = 0;
+        for(int i = 0; i < n; ++i) {
+            if(parent[i] == i) ++count;
+        }
+        return count;
     }
 };

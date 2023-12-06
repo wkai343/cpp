@@ -1,4 +1,4 @@
-#include "floyed.cpp"
+#include "floyd.cpp"
 int main() {
     DNet net(4);
     for(int i = 0; i < 4; ++i) {
@@ -12,6 +12,6 @@ int main() {
     net.insertArc(2, 3, 1);
     net.insertArc(3, 0, 5);
     net.insertArc(3, 2, 12);
-    floyed(net);
+    floyd(net);
     return 0;
 }

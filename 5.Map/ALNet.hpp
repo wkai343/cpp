@@ -205,7 +205,7 @@ public:
                 if(path[q.front()].first + p->weight < path[p->vex].first) {
                     path[p->vex].first = path[q.front()].first + p->weight;
                     path[p->vex].second = q.front();
-                    if(++relaxTimes[p->vex] > vexNum) {
+                    if(++relaxTimes[p->vex] == vexNum) {
                     std::cout << "存在负权重环，无法找到最短路径" << std::endl;
                     return;
                 }
