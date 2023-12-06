@@ -9,6 +9,8 @@ protected:
     bool* visited;
 public:
     friend int keyPath(const DNet&);
+    friend void floyd(const DNet&);
+    friend bool bellmanFord(const DNet&, int);
     DNet(int s) :size(s), vexNum(0), arcNum(0) {
         vex = new char[size];
         arc = new int*[size];
@@ -19,7 +21,7 @@ public:
         for(int i = 0; i < size; ++i) {
             for(int j = 0; j < size; ++j) {
                 if(i == j) arc[i][j] = 0;
-                else arc[i][j] = -1;
+                else arc[i][j] = INT32_MAX;
             }
         }
         for(int i = 0; i < size; ++i) {
@@ -43,7 +45,7 @@ public:
     void clear() {
         for(int i = 0; i < vexNum; ++i) {
             for(int j = 0; j < vexNum; ++j) {
-                arc[i][j] = -1;
+                arc[i][j] = INT32_MAX;
             }
         }
         vexNum = 0, arcNum = 0;
@@ -63,14 +65,14 @@ public:
     int getID(int v) const {
         int count = 0;
         for(int i = 0; i < vexNum; ++i) {
-            if(i != v && arc[i][v] != -1) ++count;
+            if(i != v && arc[i][v] != INT32_MAX) ++count;
         }
         return count;
     }
     int getOD(int v) const {
         int count = 0;
         for(int i = 0; i < vexNum; ++i) {
-            if(i != v && arc[v][i] != -1) ++count;
+            if(i != v && arc[v][i] != INT32_MAX) ++count;
         }
         return count;
     }
@@ -101,14 +103,14 @@ public:
             }
         }
         for(int i = 0; i < vexNum; ++i) {
-            arc[vexNum - 1][i] = -1;
-            arc[i][vexNum - 1] = -1;
+            arc[vexNum - 1][i] = INT32_MAX;
+            arc[i][vexNum - 1] = INT32_MAX;
         }
         vexNum -= 1;
     }
     void deleteArc(int v1, int v2) {
         if(v1 < 0 || v1 >= vexNum || v2 < 0 || v2 >= vexNum || v1 == v2) return;
-        arc[v1][v2] = -1;
+        arc[v1][v2] = INT32_MAX;
         --arcNum;
     }
     void topSort() {
@@ -125,7 +127,7 @@ public:
             s.pop();
             std::cout << vex[temp] << ' ';
             for(int i = 0; i < vexNum; ++i) {
-                if(i != temp && arc[temp][i] != -1) {
+                if(i != temp && arc[temp][i] != INT32_MAX) {
                     if(--ind[i] == 0) s.push(i);
                 }
             }
@@ -157,15 +159,15 @@ public:
         ++arcNum;
     }
     void deleteArc(int v1, int v2) {
-        arc[v1][v2] = -1;
-        arc[v2][v1] = -1;
+        arc[v1][v2] = INT32_MAX;
+        arc[v2][v1] = INT32_MAX;
         --arcNum;
     }
     void DFS(int v) const {
         std::cout << vex[v] << ' ';
         visited[v] = true;
         for(int i = 0; i < vexNum; ++i) {
-            if(!visited[i] && v != i && arc[v][i] != -1) DFS(i);
+            if(!visited[i] && v != i && arc[v][i] != INT32_MAX) DFS(i);
         }
     }
     bool isConnected() {

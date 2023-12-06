@@ -17,14 +17,14 @@ int keyPath(const DNet& net) {
         s.pop();
         topo[k] = temp;
         for(int i = 0; i < net.getVexNum(); ++i) {
-            if(i != temp && net.arc[i][temp] != -1) {
+            if(i != temp && net.arc[i][temp] != INT32_MAX) {
                 if(ve[i] + net.arc[i][temp] > m) m = ve[i] + net.arc[i][temp];
             }
         }
         ve[temp] = m;
         m = 0;
         for(int i = 0; i < net.getVexNum(); ++i) {
-            if(i != temp && net.arc[temp][i] != -1) {
+            if(i != temp && net.arc[temp][i] != INT32_MAX) {
                 if(--ind[i] == 0) s.push(i);
             }
         }
@@ -36,7 +36,7 @@ int keyPath(const DNet& net) {
     for(int k = 1; k < net.getVexNum(); ++k) {
         t = net.getVexNum() - k - 1;
         for(int i = 0; i < net.getVexNum(); ++i) {
-            if(t != i && net.arc[t][i] != -1) {
+            if(t != i && net.arc[t][i] != INT32_MAX) {
                 if(vl[i] - net.arc[t][i] < m) m = vl[i] - net.arc[t][i];
             }
         }
@@ -51,7 +51,7 @@ int keyPath(const DNet& net) {
         t = topo[i];
         if(flag[t]) {
             for(int j = 0; j < net.getVexNum(); ++j) {
-                if(topo[i] != j && net.arc[topo[i]][j] != -1) {
+                if(topo[i] != j && net.arc[topo[i]][j] != INT32_MAX) {
                     if(vl[j] - net.arc[topo[i]][j] - ve[topo[i]] == 0) {
                         flag[j] = true;
                         key += net.arc[topo[i]][j];

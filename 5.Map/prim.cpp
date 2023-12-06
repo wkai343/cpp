@@ -6,7 +6,7 @@ void prim(const UNet& n, int e) {
         closest[i] = i;
     }
     for(int j = 0; j < n.getVexNum(); ++j) {
-        if(n.arc[e][j] != -1) {
+        if(n.arc[e][j] != INT32_MAX) {
             lowest[j] = n.arc[e][j]; // 0表示已添加
             closest[j] = e;
         }
@@ -23,7 +23,7 @@ void prim(const UNet& n, int e) {
         }
         std::cout << "权值为" << lowest[min] << "的边: (" << closest[min] << ',' << min << ")\n";
         for(int l = 0; l < n.getVexNum(); ++l) {
-            if(n.arc[min][l] != -1 && min != l && n.arc[min][l] < lowest[l]) {
+            if(n.arc[min][l] != INT32_MAX && min != l && n.arc[min][l] < lowest[l]) {
                 lowest[l] = n.arc[min][l];
                 closest[l] = min;
             }

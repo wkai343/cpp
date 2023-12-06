@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 #include <stack>
 class DGraph {
 protected:
@@ -140,6 +141,25 @@ public:
             }
         }
     }
+    void DFS(int v) {
+        std::cout << vex[v] << ' ';
+        visited[v] = true;
+        for(int i = 0; i < vexNum; ++i) {
+            if(!visited[i] && arc[v][i]) DFS(i);
+        }
+    }
+    void BFS(int v) {
+        std::queue<int> q;
+        q.push(v);
+        while(!q.empty()) {
+            std::cout << q.front() << ' ';
+            visited[q.front()] = true;
+            for(int i = 0; i < vexNum; ++i) {
+                if(!visited[i] && arc[q.front()][i])
+                    q.push(i);
+            }
+        }
+    }
 };
 class UGraph :public DGraph {
 public:
@@ -167,12 +187,5 @@ public:
         arc[v1][v2] = false;
         arc[v2][v1] = false;
         --arcNum;
-    }
-    void DFS(int v) const {
-        std::cout << vex[v] << ' ';
-        visited[v] = true;
-        for(int i = 0; i < vexNum; ++i) {
-            if(!visited[i] && arc[v][i]) DFS(i);
-        }
     }
 };

@@ -182,7 +182,7 @@ public:
         }
         return false;
     }
-    void DFS(int v) const {
+    void DFS(int v) {
         std::cout << vex[v].ch << ' ';
         visited[v] = true;
         ArcNode* p = vex[v].arc;
@@ -202,7 +202,7 @@ public:
         }
         return count;
     }
-    void BFS(int v) const {
+    void BFS(int v) {
         std::queue<int> q;
         ArcNode* p;
         q.push(v);

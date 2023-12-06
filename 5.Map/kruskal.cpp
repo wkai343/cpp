@@ -14,7 +14,7 @@ void kruskal(const UNet& n) {
     std::vector<Edge> e;
     for(int i = 0; i < n.getVexNum() - 1; ++i) {
         for(int j = i + 1; j < n.getVexNum(); ++j) {
-            if(n.arc[i][j] != -1) e.emplace_back(Edge(i, j, n.arc[i][j]));
+            if(n.arc[i][j] != INT32_MAX) e.emplace_back(Edge(i, j, n.arc[i][j]));
         }
         vSet[i] = i;
     }

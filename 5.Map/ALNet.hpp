@@ -184,10 +184,14 @@ public:
         }
         return false;
     }
-    // BFS求最短路径
+    // BFS求最短路径, 好像是SPFA
     void getMinPath(int v) {
         std::pair<int, int> path[vexNum];
         ArcNode* p;
+        int relaxTimes[vexNum];
+        for(int i = 0; i < vexNum; ++i) {
+            relaxTimes[i] = 0;
+        }
         for(int i = 0; i < vexNum; ++i) {
             path[i].first = INT32_MAX;
             path[i].second = -1;
@@ -201,6 +205,10 @@ public:
                 if(path[q.front()].first + p->weight < path[p->vex].first) {
                     path[p->vex].first = path[q.front()].first + p->weight;
                     path[p->vex].second = q.front();
+                    if(++relaxTimes[p->vex] > vexNum) {
+                    std::cout << "存在负权重环，无法找到最短路径" << std::endl;
+                    return;
+                }
                     q.push(p->vex);
                 }
                 p = p->next;
