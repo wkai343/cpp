@@ -7,5 +7,5 @@ int main() {
     t.deleteNode(9);
     t.inOrder();
     std::cout << std::endl;
-    t.levelOrder();
+    t.dispTree();
 }

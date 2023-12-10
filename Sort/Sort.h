@@ -28,9 +28,11 @@ void binInsertSort(int*, int); // 二分插入排序
 void shellSort(int*, int); // 希尔排序
 
 // 归并排序
-void mergeSort(int*, int); // 二路归并排序
+void mergeSort(int*, int); // 自底向上二路归并排序
+void mergeSort2(int*, int); // 自顶向下二路归并排序
 
 // 分配排序
 void countSort(int*, int); // 计数排序
 void bucketSort(int*, int); // 桶排序
 void radixSort(int*, int); // 基数排序
+void radixSort(int*, int, int); // 基数排序

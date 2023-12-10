@@ -3,7 +3,6 @@
 #include <cstring>
 #include <queue>
 #include <stack>
-#include <utility>
 #include <vector>
 struct BNode {
     char data;
@@ -668,4 +667,20 @@ public:
     void swapTree() {
         swapTree(root);
     }
+
+    // 树的层序遍历
+    // void levelOrder() {
+    //     std::queue<BNode*> q;
+    //     BNode* p;
+    //     q.push(root);
+    //     while(!q.empty()) {
+    //         p = q.front()->left;
+    //         while(p != nullptr) {
+    //             q.push(p);
+    //             p = p->right;
+    //         }
+    //         std::cout << q.front()->data << ' ';
+    //         q.pop();
+    //     }
+    // }
 };

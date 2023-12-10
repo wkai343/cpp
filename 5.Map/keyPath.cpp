@@ -1,5 +1,4 @@
 #include "AMNet.hpp"
-#include <cstdint>
 #include <stack>
 int keyPath(const DNet& net) {
     int ve[net.getVexNum()], vl[net.getVexNum()], m = 0, topo[net.getVexNum()], key = 0; // ve是事件最早，vl是事件最迟，topo记录拓扑次序，key是关键路径长度

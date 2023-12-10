@@ -1,7 +1,7 @@
 void binInsertSort(int* data, int n) {
     if(data == nullptr || n <= 0) return;
     int t; // t为待插入数
-        for(int i = 1; i < n; ++i) {
+    for(int i = 1; i < n; ++i) {
         t = data[i];
         int left = 0, right = i - 1, mid;
         while(left <= right) {

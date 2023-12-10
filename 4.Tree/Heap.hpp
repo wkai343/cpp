@@ -10,15 +10,28 @@ private:
             i = (i - 1) / 2;
         }
     }
+    // void siftDown(int i) {
+    //     int min, t;
+    //     while(2 * i + 1 < length) {
+    //         min = 2 * i + 2 < length ? (elem[2 * i + 1] < elem[2 * i + 2] ? 2 * i + 1 : 2 * i + 2) : 2 * i + 1;
+    //         if(elem[i] > elem[min]) {
+    //             t = elem[i], elem[i] = elem[min], elem[min] = t;
+    //         } else break;
+    //         i = min;
+    //     }
+    // }
     void siftDown(int i) {
-        int min, t;
-        while(2 * i + 1 < length) {
-            min = 2 * i + 2 < length ? (elem[2 * i + 1] < elem[2 * i + 2] ? 2 * i + 1 : 2 * i + 2) : 2 * i + 1;
-            if(elem[i] > elem[min]) {
-                t = elem[i], elem[i] = elem[min], elem[min] = t;
+        if(i < 0 || i >= length) return;
+        int tmp = elem[i], j = i, k = 2 * i + 1;
+        while(j < length) {
+            if(j < length - 1 && elem[j] > elem[j + 1])
+                ++j;
+            if(tmp > elem[j]) {
+                elem[i] = elem[j];
+                i = j, j = 2 * i + 1;
             } else break;
-            i = min;
         }
+        elem[i] = tmp;
     }
     friend int main();
 public:
@@ -76,15 +89,28 @@ class MaxHeap {
             i = (i - 1) / 2;
         }
     }
+    // void siftDown(int i) {
+    //     int max, t;
+    //     while(2 * i + 1 < length) {
+    //         max = 2 * i + 2 < length ? (elem[2 * i + 1] > elem[2 * i + 2] ? 2 * i + 1 : 2 * i + 2) : 2 * i + 1;
+    //         if(elem[i] < elem[max]) {
+    //             t = elem[i], elem[i] = elem[max], elem[max] = t;
+    //         } else break;
+    //         i = max;
+    //     }
+    // }
     void siftDown(int i) {
-        int max, t;
-        while(2 * i + 1 < length) {
-            max = 2 * i + 2 < length ? (elem[2 * i + 1] > elem[2 * i + 2] ? 2 * i + 1 : 2 * i + 2) : 2 * i + 1;
-            if(elem[i] < elem[max]) {
-                t = elem[i], elem[i] = elem[max], elem[max] = t;
+        if(i < 0 || i >= length) return;
+        int tmp = elem[i], j = i, k = 2 * i + 1;
+        while(j < length) {
+            if(j < length - 1 && elem[j] < elem[j + 1])
+                ++j;
+            if(tmp < elem[j]) {
+                elem[i] = elem[j];
+                i = j, j = 2 * i + 1;
             } else break;
-            i = max;
         }
+        elem[i] = tmp;
     }
     friend int main();
 public:

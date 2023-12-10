@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <queue>
 struct BNode {
     int data;
     int height;
@@ -34,6 +33,8 @@ public:
         destroy(root);
         root = nullptr;
     }
+    // 查找可用递归
+    // 查找，p是双亲，返回值是查找到的地址，查找失败返回空指针
     BNode* searchData(int i, BNode*& p) const {
         BNode* t = p = root;
         while(t && t->data != i) {
@@ -46,6 +47,19 @@ public:
         }
         return t;
     }
+    // 只返回找到的节点
+    BNode* searchData(int i) const {
+        BNode* t = root;
+        while(t && t->data != i) {
+            if(i < t->data) {
+                t = t->left;
+            } else {
+                t = t->right;
+            }
+        }
+        return t;
+    }
+    // 仅判断在否
     bool searchNode(int i) const {
         BNode* p = root;
         while(p) {
@@ -59,10 +73,10 @@ public:
         }
         return false;
     }
+    // 插入，调用查找
     bool insertData(int i) {
-        if(root == nullptr) {
+        if(root == nullptr)
             root = new BNode(i);
-        }
         BNode* p;
         if(searchData(i, p)) return false;
         if(i < p->data) {
@@ -72,13 +86,13 @@ public:
         }
         return true;
     }
+    // 递归插入
     void insertNode(int i) {
         root = insertNode(root, i);
     }
     BNode* insertNode(BNode* node, int i) {
-        if(node == nullptr) {
-            return new BNode(i);
-        }
+        if(node == nullptr)
+            node = new BNode(i);
         if(i < node->data) {
             node->left = insertNode(node->left, i);
         } else if(i > node->data) {
@@ -86,11 +100,11 @@ public:
         }
         return node;
     }
+    // 删除，调用查找
     bool deleteData(int i) {
         BNode* p, * t;
-        if(root == nullptr || !(t = searchData(i, p))) {
+        if(root == nullptr || !(t = searchData(i, p)))
             return false;
-        }
         if(t->left == nullptr || t->right == nullptr) {
             if(t->left == nullptr) {
                 if(t == p->left) {
@@ -101,7 +115,7 @@ public:
                     delete t;
                 }
             } else if(t->right == nullptr) {
-                if(t == p->left) {
+                if(t == p->left) { 
                     p->left = t->left;
                     delete t;
                 } else {
@@ -117,13 +131,14 @@ public:
                 t = t->right;
             }
             int tem = t->data;
-            t->data = temp->data;
-            temp->data = tem;
+            t->data = temp->data, temp->data = tem;
             p->right = t->left;
             delete t;
         }
         return true;
     }
+
+    // 中序遍历
     void inOrder(const BNode* BN) {
         if(BN->left != nullptr) inOrder(BN->left);
         std::cout << BN->data << ' ';
@@ -133,14 +148,20 @@ public:
         if(root == nullptr) return;
         inOrder(root);
     }
-    void levelOrder() {
-        std::queue<BNode*> q;
-        if(root != nullptr) q.push(root);
-        while(!q.empty()) {
-            std::cout << q.front()->data << ' ';
-            if(q.front()->left != nullptr) q.push(q.front()->left);
-            if(q.front()->right != nullptr) q.push((q.front()->right));
-            q.pop();
+    // 输出括号表示串
+    void dispTree(BNode* p) {
+        if(p) {
+            std::cout << p->data;
+            if(p->left || p->right) {
+                std::cout << '(';
+                dispTree(p->left);
+                std::cout << ", ";
+                dispTree(p->right);
+                std::cout << ')';
+            }
         }
+    }
+    void dispTree() {
+        dispTree(root);
     }
 };

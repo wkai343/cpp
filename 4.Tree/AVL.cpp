@@ -11,28 +11,6 @@ public:
             insertNode(data[i]);
         }
     }
-    // bool insertData(int i) {
-    //     if(root == nullptr) {
-    //         root = new BNode(i);
-    //     }
-    //     BNode* p, * t = root;
-    //     if((t = searchData(i, p))) return false;
-    //     t = root;
-    //     while(t) {
-    //         ++t->height;
-    //         if(i < t->data) {
-    //             t = t->left;
-    //         } else {
-    //             t = t->right;
-    //         }
-    //     }
-    //     if(i < p->data) {
-    //         p->left = new BNode(i);
-    //     } else {
-    //         p->right = new BNode(i);
-    //     }
-    //     return true;
-    // }
     void insertNode(int i) {
         root = insertNode(root, i);
     }
