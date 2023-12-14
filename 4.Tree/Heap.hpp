@@ -80,15 +80,15 @@ public:
 class MaxHeap {
     private:
     int* elem, size, length;
-    void siftUp(int i) {
-        int t;
-        while((i - 1) / 2 >= 0) {
-            if(elem[i] > elem[(i - 1) / 2]) {
-                t = elem[(i - 1) / 2], elem[(i - 1) / 2] = elem[i], elem[i] = t;
-            } else break;
-            i = (i - 1) / 2;
-        }
-    }
+    // void siftUp(int i) {
+    //     int t;
+    //     while((i - 1) / 2 >= 0) {
+    //         if(elem[i] > elem[(i - 1) / 2]) {
+    //             t = elem[(i - 1) / 2], elem[(i - 1) / 2] = elem[i], elem[i] = t;
+    //         } else break;
+    //         i = (i - 1) / 2;
+    //     }
+    // }
     // void siftDown(int i) {
     //     int max, t;
     //     while(2 * i + 1 < length) {
@@ -99,9 +99,20 @@ class MaxHeap {
     //         i = max;
     //     }
     // }
+    void siftUp(int i) {
+        if(i < 0 || i >= length) return;
+        int tmp = elem[i], j = (i - 1) / 2;
+        while(j >= 0) {
+            if(tmp > elem[j]) {
+                elem[i] = elem[j];
+                i = j, j = (i - 1) / 2;
+            } else break;
+        }
+        elem[i] = tmp;
+    }
     void siftDown(int i) {
         if(i < 0 || i >= length) return;
-        int tmp = elem[i], j = i, k = 2 * i + 1;
+        int tmp = elem[i], j = 2 * i + 1;
         while(j < length) {
             if(j < length - 1 && elem[j] < elem[j + 1])
                 ++j;
